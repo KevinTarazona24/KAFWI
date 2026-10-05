@@ -142,8 +142,8 @@ Las propuestas de modificación del código pueden enviarse mediante un **pull r
 ## Créditos
 
 - **Kevin Tarazona:** estudiante de Geología de la Universidad Industrial de Santander y miembro activo del Semillero de Investigación en Geofísica Aplicada y Computacional.
-- **Dirección de tesis:** [Agregar nombres].
-- **Colaboradores de la investigación:** [Agregar nombres y contribuciones].
+- **Dirección de tesis:** Ms.c Ana Gabriela Mantilla Dulcey y Ph(D) Yesid Paul Goyes Peñafiel. 
+- **Colaboradores de la investigación:** Estudiante de Doctorado Javier Torres Quintero.
 
 Los conjuntos de datos, las bibliotecas y los métodos externos utilizados deben reconocerse mediante sus respectivas publicaciones y repositorios originales.
 
@@ -151,7 +151,7 @@ Los conjuntos de datos, las bibliotecas y los métodos externos utilizados deben
 
 Si utilizas los códigos o resultados de este proyecto en un trabajo académico, cita la tesis asociada:
 
-> Tarazona, K. ([Año]). *[Título completo de la tesis]* [Tesis de pregrado, Universidad Industrial de Santander]. [Enlace al repositorio institucional].
+> Tarazona, K. ([2026]). *[Inversión de onda completa mediante aprendizaje profundo no supervisado guiado por la física]* [Tesis de pregrado, Universidad Industrial de Santander].
 
 Si utilizas contenidos relacionados con el artículo presentado en STSIVA 2026, incluye también su referencia:
 
