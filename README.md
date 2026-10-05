@@ -1,85 +1,164 @@
 # KAFWI
-### Physics-Guided Unsupervised Deep Learning for P-Wave Velocity Estimation
 
-KAFWI is a research repository for estimating two-dimensional subsurface P-wave velocity models from reflection seismic data using physics-guided unsupervised deep learning.
+## Descripción del repositorio
 
-The main contribution of this work is the design of a two-branch neural architecture that combines complementary representations of seismic observations to estimate a velocity model. Training is guided by a differentiable acoustic wave-propagation operator, which connects the predicted subsurface model to its simulated seismic response.
+Este repositorio contiene códigos en Python para estimar modelos bidimensionales de velocidad de la onda P a partir de datos de sísmica de reflexión, mediante aprendizaje profundo no supervisado guiado por la física.
 
-## Research Motivation
+El aporte principal de la investigación consiste en el diseño de una arquitectura neuronal de dos ramas que combina información complementaria de los registros sísmicos para estimar el modelo de velocidad. Este modelo se integra con un operador acústico diferenciable, que permite simular su respuesta sísmica y calcular los gradientes necesarios para optimizar los parámetros de la red.
 
-Full-waveform inversion (FWI) estimates subsurface properties by minimizing the discrepancy between observed and simulated seismic data. Although it can produce high-resolution velocity models, its performance depends on factors such as the initial model, acquisition geometry, frequency content, and computational resources.
+El proyecto forma parte de una tesis de pregrado en Geología de la **Universidad Industrial de Santander (UIS)**.
 
-Supervised deep-learning approaches offer an alternative, but typically require large collections of paired seismic data and reference velocity models. Such labeled datasets are difficult to obtain for real subsurface conditions.
+## Tesis y diapositivas de la presentación
 
-This project investigates an unsupervised framework in which seismic observations provide the training signal through a physical forward model. Reference velocity models are therefore not required to define the training objective, although they can be used to evaluate predictions in synthetic experiments.
+El documento de tesis y las diapositivas de sustentación se incorporarán a este apartado cuando estén disponibles.
 
-## Method Overview
+## Divulgación académica
 
-The framework connects neural velocity estimation with acoustic wave simulation:
+Durante el desarrollo de esta investigación se generaron productos de divulgación académica para compartir la metodología, los avances y los principales resultados.
 
-1. **Seismic input:** reflection seismic records are provided to the neural network.
-2. **Feature extraction and fusion:** a two-branch architecture processes complementary information from the input data.
-3. **Velocity prediction:** the network produces a two-dimensional P-wave velocity model.
-4. **Forward simulation:** a differentiable acoustic operator generates synthetic seismic data from the predicted model.
-5. **Loss evaluation:** the simulated response is compared with the observed seismic data, together with spatial regularization.
-6. **Parameter optimization:** gradients are propagated through the forward operator to update the neural network.
+### Participación en STSIVA 2026
 
-The differentiable operator enables the calculation of gradients linking the seismic-data discrepancy to the predicted velocity model and, subsequently, to the network parameters.
+La investigación fue presentada en el **XXVI International Symposium of Image, Signal Processing, and Artificial Vision (STSIVA 2026)**, realizado del **2 al 4 de septiembre de 2026**, con el artículo de conferencia titulado:
 
-## Optimization Objective
+**“Unsupervised Physics-Constrained Neural Approximation for Full-Waveform Inversion”.**
 
-The training objective combines:
+### Presentación en la Sexta Semana de la Geofísica
 
-- **L1 seismic misfit**, measuring absolute differences between observed and simulated seismic data.
-- **L2 seismic misfit**, penalizing squared differences between the seismic responses.
-- **Anisotropic total variation**, encouraging spatial regularity in the estimated velocity model.
+Los avances y principales resultados de la investigación serán presentados durante la **Sexta Semana de la Geofísica de la Universidad Industrial de Santander**, que se llevará a cabo del **3 al 7 de noviembre de 2026**, con la presentación titulada:
 
-A depth-dependent gradient weighting is also considered to adjust the contribution of different depth regions during optimization.
+**“Estimación de modelos de velocidad de la onda P en cuencas emergentes colombianas y sus márgenes estructurales”.**
 
-The balance between data fitting and regularization is important: the estimated model should explain the seismic observations while maintaining a geologically interpretable spatial structure.
+## Base de datos
 
-## Repository Structure
+La investigación utiliza datos sísmicos sintéticos y sus correspondientes modelos de velocidad de referencia para evaluar la recuperación de estructuras del subsuelo.
+
+Los escenarios considerados incluyen las familias **FlatVel, CurveVel, FaultVel y Style de OpenFWI**, así como escenarios geológicos de **GeoFWI**.
+
+La información utilizada comprende:
+
+- **Registros sísmicos:** respuestas de varios disparos registradas en un conjunto de receptores.
+- **Modelos de velocidad de referencia:** distribuciones bidimensionales de velocidad de la onda P utilizadas para evaluar las estimaciones.
+- **Parámetros de adquisición y simulación:** posiciones de fuentes y receptores, espaciamiento de la malla, intervalo temporal y características de la ondícula fuente.
+
+En el esquema no supervisado, los modelos de referencia se utilizan para evaluar los resultados; no se emplean como etiquetas objetivo en la función de pérdida.
+
+Los conjuntos de datos deben obtenerse por separado y sus rutas deben configurarse antes de ejecutar los experimentos.
+
+## Organización del repositorio
 
 ```text
 KAFWI/
-├── AcousticOperator/         # Acoustic forward-modeling components
-├── Unsupervised_Approach/    # Neural-network and inversion components
-├── main.py                  # Main experiment script
-├── utils.py                 # Supporting utilities
-├── rainbow256.npy           # Auxiliary NumPy resource
-├── README.md                # Project documentation
-└── .gitignore               # Git exclusion rules
+├── AcousticOperator/
+├── Unsupervised_Approach/
+├── main.py
+├── utils.py
+├── rainbow256.npy
+├── README.md
+└── .gitignore
 ```
 
-## Experimental Scope
+- **AcousticOperator/**: componentes relacionados con el operador acústico y la simulación de la propagación de ondas.
+- **Unsupervised_Approach/**: componentes del enfoque de estimación neuronal y optimización no supervisada.
+- **main.py**: script principal para la configuración y ejecución de los experimentos.
+- **utils.py**: funciones auxiliares de la implementación.
+- **rainbow256.npy**: recurso auxiliar en formato NumPy.
+- **README.md**: descripción y documentación general del proyecto.
+- **.gitignore**: reglas para excluir archivos temporales y otros recursos del seguimiento de Git.
 
-The research focuses on synthetic reflection seismic experiments, where reference velocity models are available for assessing reconstruction quality.
+## Requisitos previos
 
-Evaluation considers the recovery of subsurface velocity structures across different geological scenarios, including layered media and folded structures such as antiforms and synforms.
+Para ejecutar los códigos se requiere un entorno de Python con las dependencias utilizadas por los scripts.
 
-The analysis examines both the agreement between observed and simulated seismic responses and the correspondence between estimated and reference velocity models. These assessments provide complementary information: a low seismic misfit alone does not guarantee a unique or geologically accurate reconstruction.
+Antes de iniciar un experimento, se debe:
 
-## Reproducibility
+1. Instalar las bibliotecas importadas por los códigos.
+2. Obtener los registros sísmicos y los modelos de velocidad correspondientes.
+3. Configurar las rutas de entrada.
+4. Revisar los parámetros de adquisición y simulación.
+5. Configurar el dispositivo de cómputo y los parámetros de optimización.
 
-To obtain a local copy of the repository:
+Los recursos computacionales necesarios dependen del tamaño del modelo, el número de disparos, la duración de los registros y la configuración del operador acústico.
+
+## Resumen de la metodología
+
+### 1. Preparación de los datos sísmicos
+
+Los registros sísmicos se organizan según la geometría de adquisición y se preparan como entrada de la arquitectura neuronal.
+
+Para comparar los datos observados y simulados, se deben mantener consistentes las posiciones de las fuentes y los receptores, el muestreo espacial y temporal, y la definición de la fuente sísmica.
+
+### 2. Estimación mediante una arquitectura de dos ramas
+
+La arquitectura procesa información complementaria de los registros sísmicos a través de dos ramas y combina las características extraídas para estimar un modelo bidimensional de velocidad de la onda P.
+
+El diseño de esta arquitectura constituye el aporte principal del trabajo dentro del esquema de aprendizaje profundo no supervisado guiado por la física.
+
+### 3. Simulación con un operador acústico diferenciable
+
+El modelo de velocidad estimado se introduce en el operador acústico para generar registros sísmicos simulados.
+
+La implementación diferenciable permite calcular gradientes a través de la simulación, relacionando la discrepancia entre los registros con el modelo de velocidad estimado y los parámetros de la red neuronal.
+
+### 4. Optimización no supervisada
+
+La función de pérdida combina:
+
+- **Desajuste L1:** mide las diferencias absolutas entre los registros observados y simulados.
+- **Desajuste L2:** penaliza las diferencias cuadráticas entre ambos registros.
+- **Variación total anisotrópica:** regulariza las variaciones espaciales del modelo de velocidad.
+
+Además, se incorpora un precondicionamiento del gradiente dependiente de la profundidad para ajustar su contribución durante la optimización.
+
+### 5. Evaluación de los resultados
+
+La evaluación considera tanto la correspondencia entre los modelos estimados y los modelos de referencia como el ajuste entre los registros sísmicos observados y simulados.
+
+Desde la interpretación geológica, se analiza la recuperación de la geometría de las capas, los contrastes de velocidad y las estructuras plegadas, incluidas antiformas y sinformas.
+
+## Cómo obtener el repositorio
+
+Para descargar una copia local, ejecutar en una terminal:
 
 ```bash
 git clone https://github.com/KevinTarazona24/KAFWI.git
 cd KAFWI
 ```
 
-Before running an experiment, review the source code and configure the input data, acquisition parameters, computational device, and optimization settings for the intended case.
+Antes de ejecutar los códigos, revisar la configuración del experimento y ajustar las rutas de los datos y los parámetros correspondientes.
 
-Experiment reproduction requires consistent spatial and temporal sampling, source definitions, receiver locations, and forward-modeling settings.
+## ¿Cómo colaborar con el proyecto?
 
-## Limitations
+Puedes contribuir reportando errores, proponiendo mejoras en la documentación o compartiendo observaciones que faciliten la reproducción de los experimentos.
 
-This implementation is intended for research and experimentation. Reconstruction quality depends on the information contained in the seismic observations, the assumptions of the acoustic model, the network architecture, and the optimization configuration.
+Para reportar un problema, abre un **issue** en GitHub e incluye:
 
-Results obtained on synthetic datasets should not be interpreted as evidence of equivalent performance on field data without further validation.
+- Una descripción del problema.
+- El script y la configuración utilizados.
+- El mensaje de error, cuando corresponda.
+- Los pasos necesarios para reproducirlo.
 
-## Academic Context
+Las propuestas de modificación del código pueden enviarse mediante un **pull request**.
 
-This repository supports research on physics-guided unsupervised deep learning for P-wave velocity estimation from reflection seismic data.
+## Créditos
 
-The architectural contribution is developed within an existing physics-guided learning paradigm: the physical operator supplies the connection between the estimated model and the seismic observations, while the proposed neural architecture defines how the input data are transformed into a velocity estimate.
+- **Kevin Tarazona:** estudiante de Geología de la Universidad Industrial de Santander y miembro activo del Semillero de Investigación en Geofísica Aplicada y Computacional.
+- **Dirección de tesis:** [Agregar nombres].
+- **Colaboradores de la investigación:** [Agregar nombres y contribuciones].
+
+Los conjuntos de datos, las bibliotecas y los métodos externos utilizados deben reconocerse mediante sus respectivas publicaciones y repositorios originales.
+
+## Cómo citar
+
+Si utilizas los códigos o resultados de este proyecto en un trabajo académico, cita la tesis asociada:
+
+> Tarazona, K. ([Año]). *[Título completo de la tesis]* [Tesis de pregrado, Universidad Industrial de Santander]. [Enlace al repositorio institucional].
+
+Si utilizas contenidos relacionados con el artículo presentado en STSIVA 2026, incluye también su referencia:
+
+> [Lista completa de autores]. (2026). *Unsupervised Physics-Constrained Neural Approximation for Full-Waveform Inversion*. XXVI International Symposium of Image, Signal Processing, and Artificial Vision (STSIVA). [DOI o enlace de publicación].
+
+## Licencia
+
+La licencia de uso de este proyecto está pendiente de definición y se incorporará en el archivo `LICENSE`.
+
+Los datos y las bibliotecas de terceros conservan sus propias licencias y condiciones de uso.
